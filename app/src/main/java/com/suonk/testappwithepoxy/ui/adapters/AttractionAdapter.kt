@@ -11,7 +11,10 @@ import com.bumptech.glide.Glide
 import com.suonk.testappwithepoxy.databinding.ItemAttractionBinding
 import com.suonk.testappwithepoxy.models.data.Attraction
 
-class AttractionAdapter(private val activity: Activity) :
+class AttractionAdapter(
+    private val activity: Activity,
+    private val onClickedCallback: (String) -> Unit
+) :
     ListAdapter<Attraction, AttractionAdapter.ViewHolder>(AttractionComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,14 +25,14 @@ class AttractionAdapter(private val activity: Activity) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val attraction = getItem(position)
-        holder.onBind(attraction)
+        holder.onBind(attraction, onClickedCallback)
         Log.i("Attractions", "$attraction")
     }
 
     inner class ViewHolder(private val binding: ItemAttractionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(attraction: Attraction) {
+        fun onBind(attraction: Attraction, onClicked: (String) -> Unit) {
             binding.titleTextView.text = attraction.title
             binding.monthsToVisitTextView.text = attraction.months_to_visit
 
@@ -37,7 +40,11 @@ class AttractionAdapter(private val activity: Activity) :
             Glide.with(activity)
                 .load(attraction.image_urls[0])
                 .centerCrop()
-                .into(binding.headerImageView);
+                .into(binding.headerImageView)
+
+            binding.root.setOnClickListener {
+                onClicked(attraction.id)
+            }
         }
     }
 

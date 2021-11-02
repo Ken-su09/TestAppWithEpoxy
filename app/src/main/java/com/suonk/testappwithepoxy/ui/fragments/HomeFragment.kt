@@ -33,11 +33,15 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         contextActivity = activity as MainActivity
-        attractionAdapter = AttractionAdapter(contextActivity)
+        navigateToAttractionDetails()
         initRecyclerView()
     }
 
-    private fun navigateToAttractionDetails(){
+    private fun navigateToAttractionDetails() {
+        attractionAdapter = AttractionAdapter(contextActivity) { id ->
+            val navDir = HomeFragmentDirections.actionHomeFragmentToAttractionDetailFragment(id)
+            navController.navigate(navDir)
+        }
     }
 
     private fun initRecyclerView() {
