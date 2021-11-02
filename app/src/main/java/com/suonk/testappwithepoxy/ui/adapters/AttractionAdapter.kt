@@ -13,7 +13,7 @@ import com.suonk.testappwithepoxy.models.data.Attraction
 
 class AttractionAdapter(
     private val activity: Activity,
-    private val onClickedCallback: (String) -> Unit
+    private val onClickedCallback: (String, Int) -> Unit
 ) :
     ListAdapter<Attraction, AttractionAdapter.ViewHolder>(AttractionComparator()) {
 
@@ -25,25 +25,23 @@ class AttractionAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val attraction = getItem(position)
-        holder.onBind(attraction, onClickedCallback)
-        Log.i("Attractions", "$attraction")
+        holder.onBind(attraction, onClickedCallback, position)
     }
 
     inner class ViewHolder(private val binding: ItemAttractionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(attraction: Attraction, onClicked: (String) -> Unit) {
+        fun onBind(attraction: Attraction, onClicked: (String, Int) -> Unit, position: Int) {
             binding.titleTextView.text = attraction.title
             binding.monthsToVisitTextView.text = attraction.months_to_visit
 
-            Log.i("Attractions", "$attraction")
             Glide.with(activity)
                 .load(attraction.image_urls[0])
                 .centerCrop()
                 .into(binding.headerImageView)
 
             binding.root.setOnClickListener {
-                onClicked(attraction.id)
+                onClicked(attraction.id, position)
             }
         }
     }
