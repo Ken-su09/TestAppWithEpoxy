@@ -20,9 +20,9 @@
     </fragment>
     <fragment
         android:id="@+id/attractionDetailFragment"
-        android:name="com.suonk.testappwithepoxy.ui.fragments.AttractionDetailFragment"
+        android:name="com.suonk.testappwithepoxy.ui.fragments.AttractionDetailsFragment"
         android:label="fragment_attraction_detail"
-        tools:layout="@layout/fragment_attraction_detail">
+        tools:layout="@layout/fragment_attraction_details">
 
         <argument
             android:name="attractionId"
