@@ -15,7 +15,7 @@ import javax.inject.Inject
 class AttractionsViewModel @Inject constructor(private val repository: AttractionsRepository) :
     ViewModel() {
 
-    val attractionsListLiveData = MutableLiveData<List<Attraction>>()
+    val attractionsListLiveData = MutableLiveData<ArrayList<Attraction>>()
 
     fun parseAttractions(context: Context) = viewModelScope.launch {
         attractionsListLiveData.postValue(repository.parseAttractions(context))

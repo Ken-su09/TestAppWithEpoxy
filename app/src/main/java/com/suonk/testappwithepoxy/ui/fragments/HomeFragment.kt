@@ -1,21 +1,16 @@
 package com.suonk.testappwithepoxy.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.suonk.testappwithepoxy.R
 import com.suonk.testappwithepoxy.databinding.FragmentHomeBinding
-import com.suonk.testappwithepoxy.models.data.Attraction
 import com.suonk.testappwithepoxy.ui.activity.MainActivity
-import com.suonk.testappwithepoxy.ui.adapters.AttractionAdapter
+import com.suonk.testappwithepoxy.ui.adapters.AttractionEpoxyController
 import com.suonk.testappwithepoxy.viewmodels.AttractionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +19,7 @@ class HomeFragment : BaseFragment() {
 
     private var binding: FragmentHomeBinding? = null
 
-    private lateinit var attractionAdapter: AttractionAdapter
+    private lateinit var epoxyController: AttractionEpoxyController
     private lateinit var contextActivity: MainActivity
 
     private val viewModel: AttractionsViewModel by activityViewModels()
@@ -46,7 +41,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun navigateToAttractionDetails() {
-        attractionAdapter = AttractionAdapter(contextActivity) { id, position ->
+        epoxyController = AttractionEpoxyController(contextActivity) { id, position ->
             val navDir = HomeFragmentDirections.actionHomeFragmentToAttractionDetailFragment(id)
             navController.navigate(navDir)
 
@@ -59,14 +54,14 @@ class HomeFragment : BaseFragment() {
     private fun initAttractionsList() {
         viewModel.parseAttractions(contextActivity)
         viewModel.attractionsListLiveData.observe(viewLifecycleOwner, { attractions ->
-            attractionAdapter.submitList(null)
-            attractionAdapter.submitList(attractions)
+            epoxyController.attractions = attractions
         })
     }
 
     private fun initRecyclerView() {
-        binding?.recyclerView?.apply {
-            adapter = attractionAdapter
+        binding?.epoxyRecyclerView?.apply {
+            setController(epoxyController)
+            adapter = epoxyController.adapter
             initAttractionsList()
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(contextActivity)
