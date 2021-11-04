@@ -18,6 +18,7 @@ class AttractionsViewModel @Inject constructor(private val repository: Attractio
     val attractionsListLiveData = MutableLiveData<ArrayList<Attraction>>()
 
     fun parseAttractions(context: Context) = viewModelScope.launch {
+//        delay(5000)
         attractionsListLiveData.postValue(repository.parseAttractions(context))
     }
 

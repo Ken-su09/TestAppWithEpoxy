@@ -41,18 +41,23 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun navigateToAttractionDetails() {
-        epoxyController = AttractionEpoxyController(contextActivity) { id, position ->
+        epoxyController = AttractionEpoxyController(contextActivity) { id ->
             val navDir = HomeFragmentDirections.actionHomeFragmentToAttractionDetailFragment(id)
             navController.navigate(navDir)
 
             viewModel.attractionsListLiveData.observe(viewLifecycleOwner, { attractions ->
-                viewModel.setAttractionLiveData(attractions[position])
+                for (attraction in attractions) {
+                    if (attraction.id == id) {
+                        viewModel.setAttractionLiveData(attraction)
+                    }
+                }
             })
         }
     }
 
     private fun initAttractionsList() {
         viewModel.parseAttractions(contextActivity)
+//        epoxyController.isLoading = true
         viewModel.attractionsListLiveData.observe(viewLifecycleOwner, { attractions ->
             epoxyController.attractions = attractions
         })
