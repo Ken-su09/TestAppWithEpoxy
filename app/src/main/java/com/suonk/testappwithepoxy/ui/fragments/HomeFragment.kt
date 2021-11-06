@@ -70,7 +70,7 @@ class HomeFragment : BaseFragment() {
             initAttractionsList()
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(contextActivity)
-            addItemDecoration(DividerItemDecoration(contextActivity, RecyclerView.VERTICAL))
+//            addItemDecoration(DividerItemDecoration(contextActivity, RecyclerView.VERTICAL))
         }
     }
 
